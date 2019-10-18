@@ -9,7 +9,7 @@ Arista = Proto ("arista", "Arista Networks")
 local a_proto = DissectorTable.new("arista", "Arista Networks")
 TapaggTimestamp = Proto ("arista.tapaggtimestamp", "TapAgg Header Timestamp")
 UnknownSubtype = Proto ("arista.unknown", "Unknown Subtype")
--- Arista Registered Ethertype
+-- Arista Registered GRE Type
 local arista_greproto = 0xd28b
 -- Subtype for TapAgg timestamp
 local tapagg_timestamp = 0x3
@@ -40,10 +40,10 @@ function Arista.dissector(buf, packet, tree)
      local dissect = a_proto:get_dissector(p)
      pos = pos + dissect:call(buf(2):tvb(), packet, subtree)
      -- Dissect the original packet
-     -- Original type field
+     -- Original type field. Currently set to IP 0x0800
      local next_type = 2048
      -- Get the dissector for that type
-     local d = ether_table:get_dissector(next_type)
+     local d = gre_table:get_dissector(next_type)
 
      -- Verify that Wireshark understands it
      if d then
@@ -84,5 +84,5 @@ end
 function Arista.init()
 end
 
-ether_table = DissectorTable.get ("gre.proto")
-ether_table:add (arista_greproto, Arista)
+gre_table = DissectorTable.get ("gre.proto")
+gre_table:add (arista_greproto, Arista)
