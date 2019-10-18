@@ -1,4 +1,5 @@
 Based on https://eos.arista.com/analyzing-packet-header-timestamps-in-wireshark/
+and https://eos.arista.com/eos-4-21-3f/mirroring-to-gre-timestamping/
 
 It will decode following 2 types of packets following Arista TapAgg Header:
 1) L3 IP
