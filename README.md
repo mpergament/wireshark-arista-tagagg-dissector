@@ -9,4 +9,8 @@ It will decode following 2 types of packets following Arista TapAgg Header:
 1) Copy to /Applications/Wireshark.app/Contents/PlugIns/wireshark
 2) Analyze -> Reload Lua Plugins in Wireshark
 
+**L3 IP after Arista TapAgg Header**
 ![](images/wireshark-decoded.jpg)
+
+**L2 packet after Arista TapAgg Header**
+![](images/wireshark-decoded-L2.jpg)
