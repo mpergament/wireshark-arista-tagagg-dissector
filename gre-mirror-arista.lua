@@ -41,7 +41,12 @@ function Arista.dissector(buf, packet, tree)
      pos = pos + dissect:call(buf(2):tvb(), packet, subtree)
      -- Dissect the original packet
      -- Original type field. Currently set to IP 0x0800
-     local next_type = 2048
+     local guess_type = buf(pos,2):uint()
+     if guess_type == 17664 then
+        next_type = 2048
+     else
+        next_type = guess_type
+     end
      -- Get the dissector for that type
      local d = gre_table:get_dissector(next_type)
 
@@ -49,8 +54,10 @@ function Arista.dissector(buf, packet, tree)
      if d then
       d:call(buf:range(pos):tvb(), packet, tree)
      else
-      Dissector.get("ethertype"):call(buf:range(pos):tvb(),packet,tree)
+      print("DO NOT UNDERSTAND")
+      Dissector.get("eth_withoutfcs"):call(buf:range(pos):tvb(),packet,tree)
      end
+
 
     -- other subtypes as they are defined
     -- only timestamp subtype defined today
