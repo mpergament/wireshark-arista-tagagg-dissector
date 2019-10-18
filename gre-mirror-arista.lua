@@ -54,7 +54,6 @@ function Arista.dissector(buf, packet, tree)
      if d then
       d:call(buf:range(pos):tvb(), packet, tree)
      else
-      print("DO NOT UNDERSTAND")
       Dissector.get("eth_withoutfcs"):call(buf:range(pos):tvb(),packet,tree)
      end
 
