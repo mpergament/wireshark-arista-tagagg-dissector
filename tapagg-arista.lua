@@ -22,7 +22,8 @@ Arista.fields = { a_subtype }
 -- TapAgg Timestamp Header has a version number and a timestamp
 local t_version = ProtoField.uint16 ("arista.timestamp.version", "Version", base.HEX)
 local t_ts = ProtoField.absolute_time("arista.tapaggtimestamp.timestamp", "Timestamp")
-TapaggTimestamp.fields = { t_version, t_ts }
+local t_comment = ProtoField.string("multi.text", "Comment")
+TapaggTimestamp.fields = { t_version, t_ts, t_comment }
 
 -- Dissector for the Arista EtherType
 function Arista.dissector(buf, packet, tree)
@@ -93,6 +94,9 @@ function TapaggTimestamp.dissector(buf, packet, tree)
     local time = NSTime.new(seconds, nanoseconds)
     buf_len = sec_len + 4
     local ts = t:add(t_ts, buf(2,buf_len), time)
+    if sec_len == 2 then
+     local comment = t:add(t_comment, "For 48b timestamp, extra MSB 16b will be extracted from local packet capture time to display a full 64b timestamp here")
+    end
     return buf_len + 2
 end
 
